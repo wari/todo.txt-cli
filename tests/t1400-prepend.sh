@@ -57,6 +57,34 @@ test_todo_session 'prepend with &' <<EOF
 3 no running & jumping now stop
 EOF
 
+echo 'jump on hay' > todo.txt
+test_todo_session 'prepend with spaces' <<EOF
+>>> todo.sh prepend 1 "notice the   three   spaces and"
+1 notice the   three   spaces and jump on hay
+EOF
+
+cat > todo.txt <<EOF
+smell the cows
+grow some corn
+thrash some hay
+chase the chickens
+EOF
+test_todo_session 'prepend with symbols' <<EOF
+>>> todo.sh prepend 1 "~@#$%^&*()-_=+[{]}|;:',<.>/?"
+1 ~@#$%^&*()-_=+[{]}|;:',<.>/? smell the cows
+
+>>> todo.sh prepend 2 '\`!\\"'
+2 \`!\\" grow some corn
+
+>>> todo.sh list
+4 chase the chickens
+3 thrash some hay
+2 \`!\\" grow some corn
+1 ~@#$%^&*()-_=+[{]}|;:',<.>/? smell the cows
+--
+TODO: 4 of 4 tasks shown
+EOF
+
 cat /dev/null > todo.txt
 test_todo_session 'prepend handling prepended date on add' <<EOF
 >>> todo.sh -t add "new task"
